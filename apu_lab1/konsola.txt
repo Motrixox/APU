@@ -1,0 +1,291 @@
+> # a)
+> a = 5/4^3
+> b = 2 * a
+> min(a,b)
+[1] 0.078125
+> # b)
+> help(min)
+> # c)
+> a = c(50:75)
+> a
+ [1] 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70
+[22] 71 72 73 74 75
+> mean(a^2)
+[1] 3962.5
+> # d)
+> apropos("min", mode = "function")
+ [1] ".rs.api.terminalActivate"               
+ [2] ".rs.api.terminalBuffer"                 
+ [3] ".rs.api.terminalBusy"                   
+ [4] ".rs.api.terminalClear"                  
+ [5] ".rs.api.terminalContext"                
+ [6] ".rs.api.terminalCreate"                 
+ [7] ".rs.api.terminalExecute"                
+ [8] ".rs.api.terminalExitCode"               
+ [9] ".rs.api.terminalKill"                   
+[10] ".rs.api.terminalList"                   
+[11] ".rs.api.terminalRunning"                
+[12] ".rs.api.terminalSend"                   
+[13] ".rs.api.terminalVisible"                
+[14] ".rs.create_terminal_cursor_rules"       
+[15] ".rs.create_terminal_rule"               
+[16] ".rs.create_terminal_viewport_rule"      
+[17] ".rs.explorer.callCustomInspector"       
+[18] ".rs.isSystemInterpreter"                
+[19] ".rs.python.findPythonSystemInterpreters"
+[20] ".rs.quarto.terminatePreview"            
+[21] ".rs.setUsingMingwGcc49"                 
+[22] "cummin"                                 
+[23] "determinant"                            
+[24] "determinant.matrix"                     
+[25] "min"                                    
+[26] "nlminb"                                 
+[27] "pmin"                                   
+[28] "pmin.int"                               
+[29] "ttheme_minimal"                         
+[30] "which.min"                              
+[31] "zoomInPlot"                             
+> # e)
+> getwd()
+[1] "D:/R"
+> setwd("D:/R")
+> a = "aparat z wymienną optyką"
+> save(a, file = "data")
+> remove(a)
+> a
+BŁĄD: nie znaleziono obiektu 'a'
+> load("data")
+> a
+[1] "aparat z wymienną optyką"
+> # f)
+> install.packages("gridExtra")
+Error in install.packages : Updating loaded packages
+> library(gridExtra)
+> help(package="gridExtra")
+> seatbelts_subset <- head(Seatbelts, 10)
+> table_grob <- tableGrob(seatbelts_subset)
+> grid.arrange(table_grob)
+> install.packages("gridExtra")
+WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+
+https://cran.rstudio.com/bin/windows/Rtools/
+Warning in install.packages :
+  pakiet ‘gridExtra’ jest w użyciu i nie zostanie zainstalowany
+> # f)
+> #install.packages("gridExtra")
+> library(gridExtra)
+> help(package="gridExtra")
+> seatbelts_subset <- head(Seatbelts, 10)
+> table_grob <- tableGrob(seatbelts_subset)
+> grid.arrange(table_grob)
+> # g)
+> c = seq(1000,800,-5)
+> #h)
+> a = 29:5
+> b = 21:33
+> d = c(b, a)
+> d
+ [1] 21 22 23 24 25 26 27 28 29 30 31 32 33 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5
+> # i)
+> nazwa = c("Canon EOS 250D", "Pentax KF", "Canon EOS 850D", "Pentax K-70", 
++           "Nikon D3500", "Canon EOS 90D", "Canon EOS 6D Mark II", 
++           "Canon PowerShot SX70", "Sony Alpha a7 III", " Sony A6100 ")
+> rozdzielczosc = c("24,1 Mpix", "24 Mpix", "24,1 Mpix", "24 Mpix", "24,2 Mpix",
++                   "32,5 Mpix", "26,2 Mpix", "20,3 Mpix", "24,2 Mpix", "24,2 Mpix")
+> zakres_czulosci = c("100 - 25600", "100-102400", "100 - 25600", "100 - 102400 ",
++                     "100 - 25600 ", "100 - 25600 ", "100 - 40000 ", 
++                     "100 - 25600 ", "50 - 204800", "100 - 32000")
+> cena = c(3299.00, 3928.00, 3999.00, 4099.00, 2590.00, 4999.00, 5999.00, 2679.00,
++          8199.00, 3999.00)
+> liczba_opinii = c(1, 0, 0, 1, 22, 10, 63, 23, 12, 7)
+> 
+> aparaty = data.frame(nazwa, rozdzielczosc, zakres_czulosci, cena, liczba_opinii)
+> aparaty
+                  nazwa rozdzielczosc zakres_czulosci cena
+1        Canon EOS 250D     24,1 Mpix     100 - 25600 3299
+2             Pentax KF       24 Mpix      100-102400 3928
+3        Canon EOS 850D     24,1 Mpix     100 - 25600 3999
+4           Pentax K-70       24 Mpix   100 - 102400  4099
+5           Nikon D3500     24,2 Mpix    100 - 25600  2590
+6         Canon EOS 90D     32,5 Mpix    100 - 25600  4999
+7  Canon EOS 6D Mark II     26,2 Mpix    100 - 40000  5999
+8  Canon PowerShot SX70     20,3 Mpix    100 - 25600  2679
+9     Sony Alpha a7 III     24,2 Mpix     50 - 204800 8199
+10          Sony A6100      24,2 Mpix     100 - 32000 3999
+   liczba_opinii
+1              1
+2              0
+3              0
+4              1
+5             22
+6             10
+7             63
+8             23
+9             12
+10             7
+> 
+> srednia_cena = mean(aparaty$cena)
+> srednia_cena
+[1] 4379
+> # j)
+> nowy_aparat = data.frame(nazwa = "Panasonic Lumix S5", rozdzielczosc = "24,2 Mpix",
++                           zakres_czulosci = "100 - 204800", cena = 8190.00, liczba_opinii = 1)
+> 
+> aparaty = rbind(aparaty, nowy_aparat)
+> aparaty
+                  nazwa rozdzielczosc zakres_czulosci cena liczba_opinii
+1        Canon EOS 250D     24,1 Mpix     100 - 25600 3299             1
+2             Pentax KF       24 Mpix      100-102400 3928             0
+3        Canon EOS 850D     24,1 Mpix     100 - 25600 3999             0
+4           Pentax K-70       24 Mpix   100 - 102400  4099             1
+5           Nikon D3500     24,2 Mpix    100 - 25600  2590            22
+6         Canon EOS 90D     32,5 Mpix    100 - 25600  4999            10
+7  Canon EOS 6D Mark II     26,2 Mpix    100 - 40000  5999            63
+8  Canon PowerShot SX70     20,3 Mpix    100 - 25600  2679            23
+9     Sony Alpha a7 III     24,2 Mpix     50 - 204800 8199            12
+10          Sony A6100      24,2 Mpix     100 - 32000 3999             7
+11   Panasonic Lumix S5     24,2 Mpix    100 - 204800 8190             1
+> 
+> srednia_cena_po_dodaniu = mean(aparaty$cena)
+> srednia_cena_po_dodaniu
+[1] 4725.455
+> # k)
+> ocena = c(5, 0, 0, 5, 4.5, 4, 4.5, 4.5, 4, 5, 5)
+> aparaty = cbind(aparaty, ocena)
+> aparaty
+                  nazwa rozdzielczosc zakres_czulosci cena liczba_opinii ocena
+1        Canon EOS 250D     24,1 Mpix     100 - 25600 3299             1   5.0
+2             Pentax KF       24 Mpix      100-102400 3928             0   0.0
+3        Canon EOS 850D     24,1 Mpix     100 - 25600 3999             0   0.0
+4           Pentax K-70       24 Mpix   100 - 102400  4099             1   5.0
+5           Nikon D3500     24,2 Mpix    100 - 25600  2590            22   4.5
+6         Canon EOS 90D     32,5 Mpix    100 - 25600  4999            10   4.0
+7  Canon EOS 6D Mark II     26,2 Mpix    100 - 40000  5999            63   4.5
+8  Canon PowerShot SX70     20,3 Mpix    100 - 25600  2679            23   4.5
+9     Sony Alpha a7 III     24,2 Mpix     50 - 204800 8199            12   4.0
+10          Sony A6100      24,2 Mpix     100 - 32000 3999             7   5.0
+11   Panasonic Lumix S5     24,2 Mpix    100 - 204800 8190             1   5.0
+> srednie_ceny_na_ocene <- tapply(aparaty$cena, aparaty$ocena, mean, na.rm = TRUE)
+> srednie_ceny_na_ocene
+      0       4     4.5       5 
+3963.50 6599.00 3756.00 4896.75 
+> # l)
+> nowe_aparaty = data.frame(
++   nazwa = c("Nikon Z30", "Sony Alpha 6400", "Canon EOS R10", " Panasonic Lumix DMC-G7"),
++   rozdzielczosc = c("21,51 Mpix ", "24,2 Mpix ", "24,2 Mpix", "16 Mpix "),
++   zakres_czulosci = c("100 -51200", "100 - 102400", "100-32000", "200 - 25600"),
++   cena = c(3849.00, 3949.00, 4699.00, 2090.00),
++   liczba_opinii = c(0, 9, 3, 17),
++   ocena = c(0, 4.5, 5, 5)
++ )
+> 
+> aparaty = rbind(aparaty, nowe_aparaty)
+> aparaty
+                     nazwa rozdzielczosc zakres_czulosci cena liczba_opinii ocena
+1           Canon EOS 250D     24,1 Mpix     100 - 25600 3299             1   5.0
+2                Pentax KF       24 Mpix      100-102400 3928             0   0.0
+3           Canon EOS 850D     24,1 Mpix     100 - 25600 3999             0   0.0
+4              Pentax K-70       24 Mpix   100 - 102400  4099             1   5.0
+5              Nikon D3500     24,2 Mpix    100 - 25600  2590            22   4.5
+6            Canon EOS 90D     32,5 Mpix    100 - 25600  4999            10   4.0
+7     Canon EOS 6D Mark II     26,2 Mpix    100 - 40000  5999            63   4.5
+8     Canon PowerShot SX70     20,3 Mpix    100 - 25600  2679            23   4.5
+9        Sony Alpha a7 III     24,2 Mpix     50 - 204800 8199            12   4.0
+10             Sony A6100      24,2 Mpix     100 - 32000 3999             7   5.0
+11      Panasonic Lumix S5     24,2 Mpix    100 - 204800 8190             1   5.0
+12               Nikon Z30   21,51 Mpix       100 -51200 3849             0   0.0
+13         Sony Alpha 6400    24,2 Mpix     100 - 102400 3949             9   4.5
+14           Canon EOS R10     24,2 Mpix       100-32000 4699             3   5.0
+15  Panasonic Lumix DMC-G7      16 Mpix      200 - 25600 2090            17   5.0
+> 
+> count = table(aparaty$ocena)
+> 
+> barplot(count,
++         main = "Liczebność reprezentantów dla każdej oceny",
++         ylim = c(0, max(count) + 5),
++         xlab = "Ocena klientów",
++         ylab = "Liczebność",
++         col = "skyblue")
+> procentowy_udzial = prop.table(table(aparaty$ocena)) * 100
+> pie(procentowy_udzial, 
++     main = "Procentowy udział każdej oceny",
++     col = rainbow(length(procentowy_udzial)),
++     labels = paste(names(procentowy_udzial), ": ", round(procentowy_udzial, 1), "%"))
+> library(plotrix)
+> 
+> fan.plot(procentowy_udzial,
++          main = "Procentowy udział każdej oceny",
++          col = rainbow(length(procentowy_udzial)),
++          labels = paste(names(procentowy_udzial), ": ", round(procentowy_udzial, 1), "%"))
+> # n)
+> aparaty$status_opinii = cut(aparaty$liczba_opinii,
++                              breaks = c(-Inf, 0, 10, 30, Inf),
++                              labels = c("nie ma", "mniej niż 10 opinii",
++                                         "10-30 opinii", "więcej niż 30 opinii"))
+> 
+> aparaty$status_opinii = as.factor(aparaty$status_opinii)
+> aparaty
+                     nazwa rozdzielczosc zakres_czulosci cena liczba_opinii ocena        status_opinii
+1           Canon EOS 250D     24,1 Mpix     100 - 25600 3299             1   5.0  mniej niż 10 opinii
+2                Pentax KF       24 Mpix      100-102400 3928             0   0.0               nie ma
+3           Canon EOS 850D     24,1 Mpix     100 - 25600 3999             0   0.0               nie ma
+4              Pentax K-70       24 Mpix   100 - 102400  4099             1   5.0  mniej niż 10 opinii
+5              Nikon D3500     24,2 Mpix    100 - 25600  2590            22   4.5         10-30 opinii
+6            Canon EOS 90D     32,5 Mpix    100 - 25600  4999            10   4.0  mniej niż 10 opinii
+7     Canon EOS 6D Mark II     26,2 Mpix    100 - 40000  5999            63   4.5 więcej niż 30 opinii
+8     Canon PowerShot SX70     20,3 Mpix    100 - 25600  2679            23   4.5         10-30 opinii
+9        Sony Alpha a7 III     24,2 Mpix     50 - 204800 8199            12   4.0         10-30 opinii
+10             Sony A6100      24,2 Mpix     100 - 32000 3999             7   5.0  mniej niż 10 opinii
+11      Panasonic Lumix S5     24,2 Mpix    100 - 204800 8190             1   5.0  mniej niż 10 opinii
+12               Nikon Z30   21,51 Mpix       100 -51200 3849             0   0.0               nie ma
+13         Sony Alpha 6400    24,2 Mpix     100 - 102400 3949             9   4.5  mniej niż 10 opinii
+14           Canon EOS R10     24,2 Mpix       100-32000 4699             3   5.0  mniej niż 10 opinii
+15  Panasonic Lumix DMC-G7      16 Mpix      200 - 25600 2090            17   5.0         10-30 opinii
+> 
+> procentowy_udzial_statusu_opinii <- prop.table(table(aparaty$status_opinii)) * 100
+> 
+> pie(procentowy_udzial_statusu_opinii,
++     main = "Procentowy udział aparatów o konkretnym statusie opinii",
++     col = rainbow(length(procentowy_udzial_statusu_opinii)),
++     labels = paste(names(procentowy_udzial_statusu_opinii), ": ",
++                    round(procentowy_udzial_statusu_opinii, 1), "%"))
+> # o)
+> zdania_aparatow <- paste(aparaty$nazwa, " ma ocenę klientów ", aparaty$ocena,
++                          " bo ma liczbę opinii ", aparaty$liczba_opinii)
+> 
+> cat(zdania_aparatow, sep = "\n")
+Canon EOS 250D  ma ocenę klientów  5  bo ma liczbę opinii  1
+Pentax KF  ma ocenę klientów  0  bo ma liczbę opinii  0
+Canon EOS 850D  ma ocenę klientów  0  bo ma liczbę opinii  0
+Pentax K-70  ma ocenę klientów  5  bo ma liczbę opinii  1
+Nikon D3500  ma ocenę klientów  4.5  bo ma liczbę opinii  22
+Canon EOS 90D  ma ocenę klientów  4  bo ma liczbę opinii  10
+Canon EOS 6D Mark II  ma ocenę klientów  4.5  bo ma liczbę opinii  63
+Canon PowerShot SX70  ma ocenę klientów  4.5  bo ma liczbę opinii  23
+Sony Alpha a7 III  ma ocenę klientów  4  bo ma liczbę opinii  12
+ Sony A6100   ma ocenę klientów  5  bo ma liczbę opinii  7
+Panasonic Lumix S5  ma ocenę klientów  5  bo ma liczbę opinii  1
+Nikon Z30  ma ocenę klientów  0  bo ma liczbę opinii  0
+Sony Alpha 6400  ma ocenę klientów  4.5  bo ma liczbę opinii  9
+Canon EOS R10  ma ocenę klientów  5  bo ma liczbę opinii  3
+ Panasonic Lumix DMC-G7  ma ocenę klientów  5  bo ma liczbę opinii  17
+> # p)
+> write.csv(aparaty, file = "aparaty.csv")
+> wczytane_aparaty <- read.csv("aparaty.csv")
+> wczytane_aparaty
+    X                   nazwa rozdzielczosc zakres_czulosci cena liczba_opinii ocena        status_opinii
+1   1          Canon EOS 250D     24,1 Mpix     100 - 25600 3299             1   5.0  mniej niż 10 opinii
+2   2               Pentax KF       24 Mpix      100-102400 3928             0   0.0               nie ma
+3   3          Canon EOS 850D     24,1 Mpix     100 - 25600 3999             0   0.0               nie ma
+4   4             Pentax K-70       24 Mpix   100 - 102400  4099             1   5.0  mniej niż 10 opinii
+5   5             Nikon D3500     24,2 Mpix    100 - 25600  2590            22   4.5         10-30 opinii
+6   6           Canon EOS 90D     32,5 Mpix    100 - 25600  4999            10   4.0  mniej niż 10 opinii
+7   7    Canon EOS 6D Mark II     26,2 Mpix    100 - 40000  5999            63   4.5 więcej niż 30 opinii
+8   8    Canon PowerShot SX70     20,3 Mpix    100 - 25600  2679            23   4.5         10-30 opinii
+9   9       Sony Alpha a7 III     24,2 Mpix     50 - 204800 8199            12   4.0         10-30 opinii
+10 10             Sony A6100      24,2 Mpix     100 - 32000 3999             7   5.0  mniej niż 10 opinii
+11 11      Panasonic Lumix S5     24,2 Mpix    100 - 204800 8190             1   5.0  mniej niż 10 opinii
+12 12               Nikon Z30   21,51 Mpix       100 -51200 3849             0   0.0               nie ma
+13 13         Sony Alpha 6400    24,2 Mpix     100 - 102400 3949             9   4.5  mniej niż 10 opinii
+14 14           Canon EOS R10     24,2 Mpix       100-32000 4699             3   5.0  mniej niż 10 opinii
+15 15  Panasonic Lumix DMC-G7      16 Mpix      200 - 25600 2090            17   5.0         10-30 opinii
