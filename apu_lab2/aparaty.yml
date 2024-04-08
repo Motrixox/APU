@@ -1,0 +1,141 @@
+Version: 2.0
+
+
+#########################
+# Alternatives Section
+#
+
+Alternatives: &alternatives
+  Canon EOS 250D:
+    rozdzielczosc: 24.1
+    zakres_czulosci: 25600
+    cena: 3299
+    liczba_opinii: 1
+    ocena: 5
+  Pentax KF:
+    rozdzielczosc: 24
+    zakres_czulosci: 102400
+    cena: 3928
+    liczba_opinii: 1
+    ocena: 4.5
+  Canon EOS 850D:
+    rozdzielczosc: 24.1
+    zakres_czulosci: 25600
+    cena: 3999
+    liczba_opinii: 1
+    ocena: 5
+  Pentax K-70:
+    rozdzielczosc: 24
+    zakres_czulosci: 102400
+    cena: 4099
+    liczba_opinii: 1
+    ocena: 5
+  Nikon D3500:
+    rozdzielczosc: 24.2
+    zakres_czulosci: 25600
+    cena: 2590
+    liczba_opinii: 22
+    ocena: 4.5
+  Canon EOS 90D:
+    rozdzielczosc: 32.5
+    zakres_czulosci: 25600
+    cena: 4999
+    liczba_opinii: 10
+    ocena: 4
+  Canon EOS 6D Mark II:
+    rozdzielczosc: 26.2
+    zakres_czulosci: 40000
+    cena: 5999
+    liczba_opinii: 63
+    ocena: 4.5
+  Canon PowerShot SX70:
+    rozdzielczosc: 20.3
+    zakres_czulosci: 25600
+    cena: 2679
+    liczba_opinii: 23
+    ocena: 4.5
+  Sony Alpha a7 III:
+    rozdzielczosc: 24.2
+    zakres_czulosci: 204800
+    cena: 8199
+    liczba_opinii: 12
+    ocena: 4
+  Sony A6100:
+    rozdzielczosc: 24.2
+    zakres_czulosci: 32000
+    cena: 3999
+    liczba_opinii: 7
+    ocena: 5
+  Panasonic Lumix S5:
+    rozdzielczosc: 24.2
+    zakres_czulosci: 204800
+    cena: 8190
+    liczba_opinii: 1
+    ocena: 5
+  Nikon Z30:
+    rozdzielczosc: 21.51
+    zakres_czulosci: 51200
+    cena: 3849
+    liczba_opinii: 1
+    ocena: 4
+  Sony Alpha 6400:
+    rozdzielczosc: 24.2
+    zakres_czulosci: 102400
+    cena: 3949
+    liczba_opinii: 9
+    ocena: 4.5
+  Canon EOS R10:
+    rozdzielczosc: 24.2
+    zakres_czulosci: 32000
+    cena: 4699
+    liczba_opinii: 3
+    ocena: 5
+  Panasonic Lumix DMC-G7:
+    rozdzielczosc: 16
+    zakres_czulosci: 25600
+    cena: 2090
+    liczba_opinii: 17
+    ocena: 5
+
+#
+# End of Alternatives Section
+#####################################
+
+################################
+# Goal Section
+#
+
+Goal:
+  name: Kup Aparat
+  preferences:
+    pairwise:
+      - [Wydajnosc, Styl, 9] 
+      - [Wydajnosc, Cena, 3] 
+      - [Wydajnosc, Jakosc, 2] 
+      - [Styl, Cena, 3] 
+      - [Jakosc, Cena, 2] 
+  children:
+    Wydajnosc:
+      preferences:
+        pairwiseFunction:
+          function(a1, a2) min(9, max(1/9, a1$rozdzielczosc/a2$rozdzielczosc))
+      children: *alternatives
+    Jakosc:
+      preferences:
+        pairwiseFunction:
+          function(a1, a2) min(9, max(1/9, a1$zakres_czulosci/a2$zakres_czulosci))
+      children: *alternatives
+    Styl:
+      preferences:
+        pairwiseFunction:
+          function(a1, a2) min(9, max(1/9, a1$ocena/a2$ocena))
+      children: *alternatives
+    Cena:
+      preferences:
+        pairwiseFunction:
+          function(a1, a2) min(9, max(1/9, a1$cena/a2$cena))
+      children: *alternatives
+
+#
+# End of Goal Section
+################################

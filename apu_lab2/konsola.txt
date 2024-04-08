@@ -1,0 +1,103 @@
+> library(ahp)
+> library(AHPtools)
+> library(data.tree)
+> library(ahp)
+> setwd("D:/R")
+> aparaty <- Load("D:/R/aparaty.yml")
+> print(aparaty, filterFun = isNotLeaf)
+      levelName
+1 Kup Aparat   
+2  ¦--Wydajnosc
+3  ¦--Jakosc   
+4  ¦--Styl     
+5  °--Cena     
+> Calculate(aparaty)
+> print(aparaty, priority = function(x) x$parent$priority["Total", x$name])
+                        levelName   priority
+1  Kup Aparat                             NA
+2   ¦--Wydajnosc                  0.57404308
+3   ¦   ¦--Canon EOS 250D         0.06733536
+4   ¦   ¦--Pentax KF              0.06705596
+5   ¦   ¦--Canon EOS 850D         0.06733536
+6   ¦   ¦--Pentax K-70            0.06705596
+7   ¦   ¦--Nikon D3500            0.06761476
+8   ¦   ¦--Canon EOS 90D          0.09080495
+9   ¦   ¦--Canon EOS 6D Mark II   0.07320276
+10  ¦   ¦--Canon PowerShot SX70   0.05671817
+11  ¦   ¦--Sony Alpha a7 III      0.06761476
+12  ¦   ¦--Sony A6100             0.06761476
+13  ¦   ¦--Panasonic Lumix S5     0.06761476
+14  ¦   ¦--Nikon Z30              0.06009891
+15  ¦   ¦--Sony Alpha 6400        0.06761476
+16  ¦   ¦--Canon EOS R10          0.06761476
+17  ¦   °--Panasonic Lumix DMC-G7 0.04470398
+18  ¦--Jakosc                     0.17978959
+19  ¦   ¦--Canon EOS 250D         0.02496100
+20  ¦   ¦--Pentax KF              0.09984399
+21  ¦   ¦--Canon EOS 850D         0.02496100
+22  ¦   ¦--Pentax K-70            0.09984399
+23  ¦   ¦--Nikon D3500            0.02496100
+24  ¦   ¦--Canon EOS 90D          0.02496100
+25  ¦   ¦--Canon EOS 6D Mark II   0.03900156
+26  ¦   ¦--Canon PowerShot SX70   0.02496100
+27  ¦   ¦--Sony Alpha a7 III      0.19968799
+28  ¦   ¦--Sony A6100             0.03120125
+29  ¦   ¦--Panasonic Lumix S5     0.19968799
+30  ¦   ¦--Nikon Z30              0.04992200
+31  ¦   ¦--Sony Alpha 6400        0.09984399
+32  ¦   ¦--Canon EOS R10          0.03120125
+33  ¦   °--Panasonic Lumix DMC-G7 0.02496100
+34  ¦--Styl                       0.15123634
+35  ¦   ¦--Canon EOS 250D         0.07194245
+36  ¦   ¦--Pentax KF              0.06474820
+37  ¦   ¦--Canon EOS 850D         0.07194245
+38  ¦   ¦--Pentax K-70            0.07194245
+39  ¦   ¦--Nikon D3500            0.06474820
+40  ¦   ¦--Canon EOS 90D          0.05755396
+41  ¦   ¦--Canon EOS 6D Mark II   0.06474820
+42  ¦   ¦--Canon PowerShot SX70   0.06474820
+43  ¦   ¦--Sony Alpha a7 III      0.05755396
+44  ¦   ¦--Sony A6100             0.07194245
+45  ¦   ¦--Panasonic Lumix S5     0.07194245
+46  ¦   ¦--Nikon Z30              0.05755396
+47  ¦   ¦--Sony Alpha 6400        0.06474820
+48  ¦   ¦--Canon EOS R10          0.07194245
+49  ¦   °--Panasonic Lumix DMC-G7 0.07194245
+50  °--Cena                       0.09493099
+51      ¦--Canon EOS 250D         0.04955909
+52      ¦--Pentax KF              0.05900822
+53      ¦--Canon EOS 850D         0.06007481
+54      ¦--Pentax K-70            0.06157706
+55      ¦--Nikon D3500            0.03890817
+56      ¦--Canon EOS 90D          0.07509727
+57      ¦--Canon EOS 6D Mark II   0.09011973
+58      ¦--Canon PowerShot SX70   0.04024517
+59      ¦--Sony Alpha a7 III      0.12316914
+60      ¦--Sony A6100             0.06007481
+61      ¦--Panasonic Lumix S5     0.12303394
+62      ¦--Nikon Z30              0.05782144
+63      ¦--Sony Alpha 6400        0.05932369
+64      ¦--Canon EOS R10          0.07059053
+65      °--Panasonic Lumix DMC-G7 0.03139694
+> Visualize(aparaty)
+Było 50 lub więcej ostrzeżeń (użyj 'warnings()' aby zobaczyć pierwsze 50)
+> Analyze(aparaty)
+                Weight Panasonic Lumix S5 Sony Alpha a7 III Pentax K-70 Canon EOS 90D Sony Alpha 6400 Pentax KF
+1 Kup Aparat    100.0%               9.7%              9.5%        7.3%          7.2%            7.2%      7.2%
+2  ¦--Wydajnosc  57.4%               3.9%              3.9%        3.8%          5.2%            3.9%      3.8%
+3  ¦--Jakosc     18.0%               3.6%              3.6%        1.8%          0.4%            1.8%      1.8%
+4  ¦--Styl       15.1%               1.1%              0.9%        1.1%          0.9%            1.0%      1.0%
+5  °--Cena        9.5%               1.2%              1.2%        0.6%          0.7%            0.6%      0.6%
+  Canon EOS 6D Mark II Canon EOS R10 Sony A6100 Canon EOS 850D Canon EOS 250D Nikon Z30 Nikon D3500 Canon PowerShot SX70
+1                 6.7%          6.2%       6.1%           6.0%           5.9%      5.8%        5.7%                 5.1%
+2                 4.2%          3.9%       3.9%           3.9%           3.9%      3.4%        3.9%                 3.3%
+3                 0.7%          0.6%       0.6%           0.4%           0.4%      0.9%        0.4%                 0.4%
+4                 1.0%          1.1%       1.1%           1.1%           1.1%      0.9%        1.0%                 1.0%
+5                 0.9%          0.7%       0.6%           0.6%           0.5%      0.5%        0.4%                 0.4%
+  Panasonic Lumix DMC-G7 Inconsistency
+1                   4.4%         18.7%
+2                   2.6%          0.0%
+3                   0.4%          0.0%
+4                   1.1%          0.0%
+5                   0.3%          0.0%
+> AnalyzeTable(aparaty)
