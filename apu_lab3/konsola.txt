@@ -1,0 +1,91 @@
+> # zad 1 
+> library("neuralnet")
+> 
+> x <- as.data.frame(runif(300, min = 1, max = 16))
+> result <- exp(1)^sqrt(x)
+> 
+> normalize <- function(x) {
++   return ((x - min(x)) / (max(x) - min(x)))
++ }
+> 
+> scaled.x <- as.data.frame(lapply(x, normalize))
+> 
+> training_data <- cbind(scaled.x, result)
+> colnames(training_data) <- c("Argument", "Wynik")
+> 
+> net.calculations <- neuralnet(Wynik~Argument, training_data, hidden = c(3,2,1),
++                               threshold = 0.01, stepmax = 1e7)
+> 
+> plot(net.calculations)
+> 
+> 
+> 
+> 
+> 
+> # zad 1 test
+> test_data <- as.data.frame(runif(10, min = 1, max = 16))
+> scaled.test_data <- as.data.frame(lapply(test_data, normalize))
+> 
+> net.results <- compute(net.calculations, scaled.test_data)
+> 
+> ls(net.results)
+[1] "net.result" "neurons"   
+> 
+> real_results <- exp(1)^sqrt(test_data)
+> 
+> prediction_results <- cbind(test_data, net.results$net.result, real_results,
++                             real_results - net.results$net.result)
+> colnames(prediction_results) <- c("Argument X", "Przewidziany wynik",
++                                   "Prawdziwy wynik", "Error")
+> 
+> print(prediction_results)
+   Argument X Przewidziany wynik Prawdziwy wynik       Error
+1    7.496604          18.092078       15.455928  -2.6361505
+2    7.551229          18.303574       15.610598  -2.6929757
+3    1.499481           2.772055        3.402577   0.6305216
+4    3.275099           5.992219        6.108758   0.1165382
+5    9.525684          27.081519       21.897462  -5.1840567
+6    9.425465          26.580978       21.543884  -5.0370939
+7   13.646568          54.161414       40.210420 -13.9509948
+8    2.299992           4.113861        4.556580   0.4427192
+9    3.892961           7.304976        7.192644  -0.1123325
+10   7.009374          16.280032       14.119010  -2.1610217
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> # zad 2
+> setwd("D:/R")
+> aparaty <- read.csv("aparatyaaa.csv")
+> 
+> aparaty <- aparaty[,-6]
+> aparaty <- aparaty[,-2]
+> aparaty <- aparaty[,-1]
+> aparaty
+   rozdzielczosc zakres_czulosci cena
+1          24.10           25600 3299
+2          24.00          102400 3928
+3          24.10           25600 3999
+4          24.00          102400 4099
+5          24.20           25600 2590
+6          32.50           25600 4999
+7          26.20           40000 5999
+8          20.30           25600 2679
+9          24.20          204800 8199
+10         24.20           32000 3999
+11         24.20          204800 8190
+12         21.51           51200 3849
+13         24.20          102400 3949
+14         24.20           32000 4699
+15         16.00           25600 2090
+> 
+> aparaty <- as.data.frame(lapply(aparaty, normalize))
+> 
+> net.price <- neuralnet(cena~zakres_czulosci+rozdzielczosc,
++                         aparaty, hidden = c(5,3,3), threshold = 0.01)
+> 
+> plot(net.price)
+> 
