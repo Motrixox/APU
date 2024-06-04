@@ -1,0 +1,77 @@
+python apu5.py
+x_train shape: (60000, 28, 28, 1)
+60000 train samples
+10000 test samples
+2024-06-04 13:44:14.783405: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE SSE2 SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #
+=================================================================
+ conv2d (Conv2D)             (None, 26, 26, 32)        320
+
+ max_pooling2d (MaxPooling2  (None, 13, 13, 32)        0
+ D)
+
+ conv2d_1 (Conv2D)           (None, 11, 11, 64)        18496
+
+ max_pooling2d_1 (MaxPoolin  (None, 5, 5, 64)          0
+ g2D)
+
+ flatten (Flatten)           (None, 1600)              0
+
+ dropout (Dropout)           (None, 1600)              0
+
+ dense (Dense)               (None, 10)                16010
+
+=================================================================
+Total params: 34826 (136.04 KB)
+Trainable params: 34826 (136.04 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+Epoch 1/15
+422/422 [==============================] - 19s 43ms/step - loss: 0.3704 - accuracy: 0.8887 - val_loss: 0.0845 - val_accuracy: 0.9760
+Epoch 2/15
+422/422 [==============================] - 21s 51ms/step - loss: 0.1128 - accuracy: 0.9669 - val_loss: 0.0545 - val_accuracy: 0.9853
+Epoch 3/15
+422/422 [==============================] - 20s 48ms/step - loss: 0.0846 - accuracy: 0.9738 - val_loss: 0.0473 - val_accuracy: 0.9877
+Epoch 4/15
+422/422 [==============================] - 23s 55ms/step - loss: 0.0702 - accuracy: 0.9786 - val_loss: 0.0402 - val_accuracy: 0.9883
+Epoch 5/15
+422/422 [==============================] - 20s 48ms/step - loss: 0.0619 - accuracy: 0.9805 - val_loss: 0.0441 - val_accuracy: 0.9878
+Epoch 6/15
+422/422 [==============================] - 23s 54ms/step - loss: 0.0556 - accuracy: 0.9832 - val_loss: 0.0358 - val_accuracy: 0.9905
+Epoch 7/15
+422/422 [==============================] - 23s 54ms/step - loss: 0.0498 - accuracy: 0.9843 - val_loss: 0.0343 - val_accuracy: 0.9902
+Epoch 8/15
+422/422 [==============================] - 17s 40ms/step - loss: 0.0469 - accuracy: 0.9855 - val_loss: 0.0324 - val_accuracy: 0.9902
+Epoch 9/15
+422/422 [==============================] - 20s 46ms/step - loss: 0.0438 - accuracy: 0.9864 - val_loss: 0.0306 - val_accuracy: 0.9912
+Epoch 10/15
+422/422 [==============================] - 20s 48ms/step - loss: 0.0419 - accuracy: 0.9864 - val_loss: 0.0280 - val_accuracy: 0.9923
+Epoch 11/15
+422/422 [==============================] - 21s 50ms/step - loss: 0.0387 - accuracy: 0.9882 - val_loss: 0.0287 - val_accuracy: 0.9922
+Epoch 12/15
+422/422 [==============================] - 18s 43ms/step - loss: 0.0367 - accuracy: 0.9883 - val_loss: 0.0288 - val_accuracy: 0.9917
+Epoch 13/15
+422/422 [==============================] - 25s 60ms/step - loss: 0.0350 - accuracy: 0.9885 - val_loss: 0.0258 - val_accuracy: 0.9930
+Epoch 14/15
+422/422 [==============================] - 29s 69ms/step - loss: 0.0333 - accuracy: 0.9890 - val_loss: 0.0269 - val_accuracy: 0.9923
+Epoch 15/15
+422/422 [==============================] - 27s 64ms/step - loss: 0.0307 - accuracy: 0.9895 - val_loss: 0.0259 - val_accuracy: 0.9923
+Test loss: 0.025752786546945572
+Test accuracy: 0.9918000102043152
+313/313 [==============================] - 1s 4ms/step
+[[9.31449709e-11 6.82252258e-12 9.77304353e-07 ... 9.99998808e-01
+  4.49997400e-10 1.57677931e-07]
+ [1.92588959e-06 1.04329883e-05 9.99985933e-01 ... 2.93221281e-11
+  1.52663603e-07 2.05069859e-12]
+ [1.12074687e-08 9.99884605e-01 4.68978413e-07 ... 1.86903071e-05
+  5.70643522e-07 5.23543306e-08]
+ ...
+ [7.13388224e-14 5.25910260e-10 1.93433621e-13 ... 4.23964117e-08
+  8.82697435e-08 1.17321477e-08]
+ [2.93370636e-06 6.13545673e-13 3.49132723e-09 ... 9.37532343e-12
+  2.97216844e-04 5.17356717e-08]
+ [2.00284285e-06 1.70995770e-11 1.12162745e-07 ... 6.68681636e-13
+  1.00522152e-06 4.47267645e-09]]
