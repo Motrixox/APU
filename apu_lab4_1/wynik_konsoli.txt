@@ -1,0 +1,107 @@
+> # Zaladowanie danych
+> cars = mtcars
+> 
+> # Konwersja kolumny klasyfikacyjnej na typ factor
+> cars$cyl <- as.factor(cars$cyl)
+> str(cars)
+'data.frame':	32 obs. of  11 variables:
+ $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+ $ cyl : Factor w/ 3 levels "4","6","8": 2 2 1 2 3 2 3 1 1 2 ...
+ $ disp: num  160 160 108 258 360 ...
+ $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...
+ $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
+ $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...
+ $ qsec: num  16.5 17 18.6 19.4 17 ...
+ $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...
+ $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
+ $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
+ $ carb: num  4 4 1 1 2 1 4 2 2 4 ...
+> 
+> # Utworzenie klasyfikatora na podstawie liczby cylindrów
+> cars_task <- makeClassifTask(data = cars, target = "cyl")
+> 
+> # Podzial danych
+> data <- c("training", "test")
+> splitData <-  split(cars, data)
+> 
+> # Lista Learnerów
+> levels(factor(listLearners()$type))
+Ostrzeżenie w poleceniu 'listLearners.character()':
+  The following learners could not be constructed, probably because their packages are not installed:
+classif.ada,classif.adaboostm1,classif.bartMachine,classif.boosting,classif.bst,classif.clusterSVM,classif.cvglmnet,classif.dbnDNN,classif.dcSVM,classif.earth,classif.evtree,classif.fdausc.glm,classif.fdausc.kernel,classif.fdausc.knn,classif.fdausc.np,classif.FDboost,classif.fgam,classif.fnn,classif.gamboost,classif.gaterSVM,classif.gausspr,classif.gbm,classif.glmboost,classif.glmnet,classif.h2o.deeplearning,classif.h2o.gbm,classif.h2o.glm,classif.h2o.randomForest,classif.IBk,classif.J48,classif.JRip,classif.kknn,classif.ksvm,classif.LiblineaRL1L2SVC,classif.LiblineaRL1LogReg,classif.LiblineaRL2L1SVC,classif.LiblineaRL2LogReg,classif.LiblineaRL2SVC,classif.LiblineaRMultiClassSVC,classif.lssvm,classif.mda,classif.mlp,classif.naiveBayes,classif.nnTrain,classif.OneR,classif.pamr,classif.PART,classif.penalized,classif.plr,classif.plsdaCaret,classif.randomForest,classif.ranger,classif.rda,cla  [... przycięte]
+[1] "classif"    "cluster"    "multilabel" "regr"       "surv"      
+> 
+> # Utworzenie learnera i trening
+> learner <- makeLearner("classif.rpart")
+> model <- train(learner, cars_task)
+> 
+> # Ocena jakosci modelu
+> predictions <- predict(model, newdata = splitData$test)
+> 
+> performance <- performance(predictions, measures = list(acc))
+> print(performance)
+   acc 
+0.6875 
+> 
+> summary(model)
+              Length Class           Mode     
+learner       15     classif.rpart   list     
+learner.model 14     rpart           list     
+task.desc     13     ClassifTaskDesc list     
+subset        32     -none-          numeric  
+features      10     -none-          character
+factor.levels  1     -none-          list     
+time           1     -none-          numeric  
+dump           0     -none-          NULL     
+> 
+> # Drzewo decyzyjne
+> rpart.plot(getLearnerModel(model), roundint = FALSE)
+> 
+> # Reguły klasyfikacyjne
+> ruleModel <- C5.0(cyl ~ ., data=splitData$training)
+> summary(ruleModel)
+
+Call:
+C5.0.formula(formula = cyl ~ ., data = splitData$training)
+
+
+C5.0 [Release 2.07 GPL Edition]  	Tue Jun  4 12:30:46 2024
+-------------------------------
+
+Class specified by attribute `outcome'
+
+Read 16 cases (11 attributes) from undefined.data
+
+Decision tree:
+
+disp > 167.6: 8 (9)
+disp <= 167.6:
+:...carb <= 3: 4 (5)
+    carb > 3: 6 (2)
+
+
+Evaluation on training data (16 cases):
+
+	    Decision Tree   
+	  ----------------  
+	  Size      Errors  
+
+	     3    0( 0.0%)   <<
+
+
+	   (a)   (b)   (c)    <-classified as
+	  ----  ----  ----
+	     5                (a): class 4
+	           2          (b): class 6
+	                 9    (c): class 8
+
+
+	Attribute usage:
+
+	100.00%	disp
+	 43.75%	carb
+
+
+Time: 0.0 secs
+
+> plot(ruleModel)
