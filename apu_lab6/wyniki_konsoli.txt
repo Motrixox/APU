@@ -1,0 +1,515 @@
+> library("tm")
+Ładowanie wymaganego pakietu: NLP
+> library("SnowballC")
+> library("wordcloud")
+Ładowanie wymaganego pakietu: RColorBrewer
+> library("RColorBrewer")
+> library("syuzhet")
+> library("ggplot2")
+
+Dołączanie pakietu: ‘ggplot2’
+
+Następujący obiekt został zakryty z ‘package:NLP’:
+
+    annotate
+
+Następujący obiekt został zakryty z ‘package:randomForest’:
+
+    margin
+
+> text <- readLines("Poetry.txt")
+Błąd w poleceniu 'file(con, "r")':nie można otworzyć połączenia
+Dodatkowo: Komunikat ostrzegawczy:
+W poleceniu 'file(con, "r")':
+  nie można otworzyć pliku 'Poetry.txt': No such file or directory
+> setwd("D:/uczelnia/semestr8/apu_lab6")
+> text <- readLines("Poetry.txt")
+Komunikat ostrzegawczy:
+W poleceniu 'readLines("Poetry.txt")':
+  niekompletna końcowa linia znaleziona w 'Poetry.txt'
+> TextDoc <- Corpus(VectorSource(text))
+> # Wyczyszczenie tekstu
+> toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+> TextDoc <- tm_map(TextDoc, toSpace, "/")
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, toSpace, "/")':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, "@")
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, toSpace, "@")':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, "\\|")
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, toSpace, "\\|")':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, "ˆa“")
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, toSpace, "ˆa“")':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, ":")
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, toSpace, ":")':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, ";")
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, toSpace, ";")':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, toSpace, ",")
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, toSpace, ",")':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, content_transformer(tolower))
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, content_transformer(tolower))':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, removeNumbers)
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, removeNumbers)':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, removeWords, stopwords("english"))
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, removeWords, stopwords("english"))':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, removeWords, c("s", "company", "team"))
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, removeWords, c("s", "company", "team"))':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, removePunctuation)
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, removePunctuation)':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, stripWhitespace)
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, stripWhitespace)':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, stemDocument)
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, stemDocument)':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, content_transformer(
++   function(x) gsub(x, pattern = "mathemat", replacement = "math")))
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, content_transformer(function(x) gsub(x, ':
+  transformation drops documents
+> TextDoc <- tm_map(TextDoc, content_transformer(
++   function(x) gsub(x, pattern = " r ", replacement = " Rlanguage ")))
+Komunikat ostrzegawczy:
+W poleceniu 'tm_map.SimpleCorpus(TextDoc, content_transformer(function(x) gsub(x, ':
+  transformation drops documents
+> # Budowanie macierzy dokumentu
+> TextDoc_dtm <- TermDocumentMatrix(TextDoc)
+> dtm_m <- as.matrix(TextDoc_dtm)
+> dtm_v <- sort(rowSums(dtm_m),decreasing=TRUE)
+> dtm_d <- data.frame(word = names(dtm_v),freq=dtm_v)
+> # Pokazanie 5 najczestszych slow
+> head(dtm_d, 5)
+         word freq
+poetri poetri  178
+form     form   88
+line     line   69
+use       use   68
+rhyme   rhyme   65
+> View(dtm_d)
+> View(dtm_m)
+> barplot(dtm_d[1:20,]$freq, las = 2, names.arg = dtm_d[1:20,]$word,
++         col ="lightgreen",
++         main ="20 najczestszych slow w artykule Poetry",
++         ylab = "Czestotliwosc slow")
+> # Chmura slow
+> set.seed(1234)
+> wordcloud(words = dtm_d$word, freq = dtm_d$freq, scale=c(5,0.5),
++           min.freq = 1,
++           max.words=100, random.order=FALSE,
++           rot.per=0.40,
++           colors=brewer.pal(8, "Dark2"))
+> # Kojarzenie slow
+> findAssocs(TextDoc_dtm, terms = findFreqTerms(TextDoc_dtm, lowfreq = 30),
++            corlimit = 0.5)
+$articl
+numeric(0)
+
+$form
+mani 
+0.51 
+
+$poetri
+numeric(0)
+
+$use
+  scheme    carri rubaiyat 
+    0.52     0.50     0.50 
+
+$poem
+numeric(0)
+
+$languag
+     affect     catalan    galician      leones      method     moratim     spanish   stresstim  subsaharan syllabletim 
+       0.72        0.72        0.72        0.72        0.72        0.72        0.72        0.72        0.72        0.72 
+  vietnames        vari      across       pitch   primarili       vedic      accent      french 
+       0.72        0.65        0.64        0.58        0.56        0.56        0.53        0.51 
+
+$often
+numeric(0)
+
+$poet
+    simpli complement 
+      0.54       0.51 
+
+$poetic
+diction 
+   0.56 
+
+$rhythm
+establish 
+     0.51 
+
+$vers
+       basic        style         seri       consid          bai         chen       despit      dynasti     eightlin          els 
+        0.58         0.56         0.55         0.54         0.52         0.52         0.52         0.52         0.52         0.52 
+     endstop      exhibit        gushi     jintishi        jueju         laid       normal   obligatori       pinyin        reach 
+        0.52         0.52         0.52         0.52         0.52         0.52         0.52         0.52         0.52         0.52 
+       regul relationship         shen         shih          shī     simplifi        sushi         tang      theoret       verbal 
+        0.52         0.52         0.52         0.52         0.52         0.52         0.52         0.52         0.52         0.52 
+    wade–gil          yue        yuefu        ziang           詩           诗 
+        0.52         0.52         0.52         0.52         0.52         0.52 
+
+$epic
+mahabharata    ramayana     odyssey       becam      cantar         cid       derek       egypt       gesar       helen 
+       0.79        0.79        0.74        0.74        0.74        0.74        0.74        0.74        0.74        0.74 
+      khams        life     lusíada     lönnrot         mio    mytholog      nezami  nibelungen       nobel       omero 
+       0.74        0.74        0.74        0.74        0.74        0.74        0.74        0.74        0.74        0.74 
+   paterson       prize     recount    shahnama     valmiki     walcott         won        king      heroic   gilgamesh 
+       0.74        0.74        0.74        0.74        0.74        0.74        0.74        0.72        0.71        0.69 
+      iliad      aeneid      virgil     continu    kalevala      person        book        west     concern       carlo 
+       0.66        0.64        0.64        0.60        0.59        0.59        0.55        0.53        0.52        0.52 
+     extent     lengthi       canto        basi         luí       event        ezra    ferdowsi      nizami       pound 
+       0.52        0.52        0.52        0.52        0.52        0.52        0.52        0.52        0.52        0.52 
+
+$rhyme
+   scheme  rubaiyat   andalus     chant    extens     royal     sixth welldefin       set      arab  european   consist 
+     0.82      0.81      0.65      0.65      0.65      0.65      0.65      0.65      0.64      0.63      0.60      0.52 
+
+$pattern
+  stress ornament      old 
+    0.59     0.51     0.50 
+
+$line
+     couplet       accord       number        ident     contrast        eight          bai         chen       despit      dynasti 
+        0.67         0.55         0.54         0.52         0.52         0.52         0.51         0.51         0.51         0.51 
+    eightlin          els      endstop      exhibit        gushi     jintishi        jueju         laid       normal   obligatori 
+        0.51         0.51         0.51         0.51         0.51         0.51         0.51         0.51         0.51         0.51 
+      pinyin        reach        regul relationship         shen         shih          shī     simplifi        sushi         tang 
+        0.51         0.51         0.51         0.51         0.51         0.51         0.51         0.51         0.51         0.51 
+     theoret       verbal     wade–gil          yue        yuefu        ziang           詩           诗 
+        0.51         0.51         0.51         0.51         0.51         0.51         0.51         0.51 
+
+$meter
+pentamet   iambic     foot 
+    0.60     0.56     0.50 
+
+$main
+numeric(0)
+
+$includ
+influenc 
+    0.51 
+
+$structur
+numeric(0)
+
+$syllabl
+     four    accept  criteria   current   satisfi     shown     spell       sìː โคลงสี่สุภาพ    requir       mai   sùpʰâːp    second 
+     0.69      0.67      0.67      0.67      0.67      0.67      0.67      0.67      0.67      0.66      0.60      0.60      0.57 
+ unstress       bat       tho       wak 
+     0.56      0.55      0.53      0.52 
+
+> syuzhet_vector <- get_sentiment(text, method="syuzhet")
+> head(syuzhet_vector)
+[1] 0.60 0.75 1.80 0.00 1.30 0.00
+> summary(syuzhet_vector)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-6.8500  0.0000  0.0000  0.6036  0.6500  9.4500 
+> bing_vector <- get_sentiment(text, method="bing")
+> head(bing_vector)
+[1] 0 1 1 0 0 0
+> summary(bing_vector)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+-7.0000  0.0000  0.0000  0.3293  0.0000 12.0000 
+> afinn_vector <- get_sentiment(text, method="afinn")
+> head(afinn_vector)
+[1] 0 3 2 0 2 0
+> summary(afinn_vector)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-15.0000   0.0000   0.0000   0.3837   0.0000  15.0000 
+> rbind(
++   sign(head(syuzhet_vector)),
++   sign(head(bing_vector)),
++   sign(head(afinn_vector))
++ )
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,]    1    1    1    0    1    0
+[2,]    0    1    1    0    0    0
+[3,]    0    1    1    0    1    0
+> d<-get_nrc_sentiment(as.vector(dtm_d$word)) 
+> head (d,10)
+   anger anticipation disgust fear joy sadness surprise trust negative positive
+1      0            0       0    0   0       0        0     0        0        0
+2      0            0       0    0   0       0        0     0        0        0
+3      0            0       0    0   0       0        0     0        0        0
+4      0            0       0    0   0       0        0     0        0        0
+5      0            0       0    0   0       0        0     0        0        0
+6      0            0       0    0   0       0        0     0        0        0
+7      0            0       0    0   0       0        0     0        0        0
+8      0            0       0    0   0       0        0     0        0        0
+9      0            0       0    0   0       0        0     0        0        0
+10     0            0       0    0   0       0        0     0        0        0
+> td<-data.frame(t(d))
+> td_new <- data.frame(rowSums(td[1:56]))
+> names(td_new)[1] <- "count"
+> td_new <- cbind("sentiment" = rownames(td_new), td_new)
+> rownames(td_new) <- NULL
+> td_new2<-td_new[1:8,]
+> quickplot(sentiment, data=td_new2, weight=count, geom="bar", fill=sentiment,
++           ylab="count")+ggtitle("Survey sentiments")
+Komunikat ostrzegawczy:
+`qplot()` was deprecated in ggplot2 3.4.0.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated. 
+> barplot(
++   sort(colSums(prop.table(d[, 1:8]))),
++   horiz = TRUE,
++   cex.names = 0.7,
++   las = 1,
++   main = "Emotions in Text", xlab="Percentage"
++ )
+> # Grafy powiazan
+> # install.packages(pkgs=c("tidytext", "igraph", "ggraph"))
+> library("tidytext")
+> library("igraph")
+
+Dołączanie pakietu: ‘igraph’
+
+Następujące obiekty zostały zakryte z ‘package:keras’:
+
+    %<-%, normalize
+
+Następujący obiekt został zakryty z ‘package:modeltools’:
+
+    clusters
+
+Następujące obiekty zostały zakryte z ‘package:dplyr’:
+
+    as_data_frame, groups, union
+
+Następujące obiekty zostały zakryte z ‘package:stats’:
+
+    decompose, spectrum
+
+Następujący obiekt został zakryty z ‘package:base’:
+
+    union
+
+> library("ggraph")
+> fileName <- "Poetry.txt"
+> text <- readChar(fileName, file.info(fileName)$size)
+> library(dplyr)
+> text_df <- data_frame(line = 1, text = text)
+Komunikat ostrzegawczy:
+`data_frame()` was deprecated in tibble 1.1.0.
+ℹ Please use `tibble()` instead.
+This warning is displayed once every 8 hours.
+Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated. 
+> text_df
+# A tibble: 1 × 2
+   line text                                                                                                                       
+  <dbl> <chr>                                                                                                                      
+1     1 "This article is about the art form. For other uses, see Poetry (disambiguation).\r\n\"Love poem\" redirects here. For the…
+> library(tidytext)
+> tidy_text <- text_df %>%
++   unnest_tokens(word, text)
+> data(stop_words)
+> 
+> de <- data.frame("thy","OLD_WORDS")
+> names(de) <- c("word","lexicon")
+> stop_words <- rbind(stop_words,de)
+> de <- data.frame("1","OLD_WORDS")
+> names(de) <- c("word","lexicon")
+> de <- data.frame("hath","OLD_WORDS")
+> names(de) <- c("word","lexicon")
+> de <- data.frame("mar’d","OLD_WORDS")
+> names(de) <- c("word","lexicon")
+> stop_words <- rbind(stop_words,de)
+> 
+> tidy_text <- tidy_text %>%
++   anti_join(stop_words)
+Joining with `by = join_by(word)`
+> 
+> tidy_text %>%
++   count(word, sort = TRUE)
+# A tibble: 2,115 × 2
+   word        n
+   <chr>   <int>
+ 1 poetry    180
+ 2 form       49
+ 3 lines      49
+ 4 poetic     48
+ 5 verse      47
+ 6 rhyme      42
+ 7 poem       39
+ 8 forms      38
+ 9 main       33
+10 century    31
+# ℹ 2,105 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> text_bigrams <- text_df %>%
++   unnest_tokens(bigram, text, token = "ngrams", n = 2)
+> text_bigrams
+# A tibble: 9,148 × 2
+    line bigram      
+   <dbl> <chr>       
+ 1     1 this article
+ 2     1 article is  
+ 3     1 is about    
+ 4     1 about the   
+ 5     1 the art     
+ 6     1 art form    
+ 7     1 form for    
+ 8     1 for other   
+ 9     1 other uses  
+10     1 uses see    
+# ℹ 9,138 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> text_bigrams %>%
++   count(bigram, sort = TRUE)
+# A tibble: 6,926 × 2
+   bigram           n
+   <chr>        <int>
+ 1 of the          62
+ 2 in the          50
+ 3 such as         33
+ 4 of poetry       29
+ 5 and the         27
+ 6 main article    26
+ 7 to the          26
+ 8 on the          23
+ 9 is a            21
+10 of a            21
+# ℹ 6,916 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> library(tidyr)
+
+Dołączanie pakietu: ‘tidyr’
+
+Następujący obiekt został zakryty z ‘package:igraph’:
+
+    crossing
+
+> bigrams_separated <- text_bigrams %>%
++   separate(bigram, c("word1", "word2"), sep = " ")
+> bigrams_filtered <- bigrams_separated %>%
++   filter(!word1 %in% stop_words$word) %>%
++   filter(!word2 %in% stop_words$word)
+> bigram_counts <- bigrams_filtered %>%
++   count(word1, word2, sort = TRUE)
+> bigram_counts
+# A tibble: 2,161 × 3
+   word1     word2          n
+   <chr>     <chr>      <int>
+ 1 main      article       26
+ 2 poetic    diction       12
+ 3 epic      poetry        11
+ 4 poetic    forms          9
+ 5 20th      century        8
+ 6 dactylic  hexameter      7
+ 7 dramatic  poetry         7
+ 8 iambic    pentameter     7
+ 9 love      poem           6
+10 narrative poetry         6
+# ℹ 2,151 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> bigrams_united <- bigrams_filtered %>%
++   unite(bigram, word1, word2, sep = " ")
+> bigrams_united
+# A tibble: 2,571 × 2
+    line bigram               
+   <dbl> <chr>                
+ 1     1 art form             
+ 2     1 poetry disambiguation
+ 3     1 disambiguation love  
+ 4     1 love poem            
+ 5     1 poem redirects       
+ 6     1 love poem            
+ 7     1 poem ep              
+ 8     1 iu song              
+ 9     1 love poem            
+10     1 poem song            
+# ℹ 2,561 more rows
+# ℹ Use `print(n = ...)` to see more rows
+> bigram_graph <- bigram_counts %>%
++   filter(word1 == "poet" | word2 == "lord") %>%
++   graph_from_data_frame()
+> bigram_graph4 <- bigram_counts %>%
++   filter(word1 == "poetry" | word2 == "poetry") %>%
++   graph_from_data_frame()
+> bigram_graph5 <- bigram_counts %>%
++   filter(word1 == "poet" | word2 == "poet") %>%
++   graph_from_data_frame()
+> a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
+> dev.new()
+NULL
+> ggraph(bigram_graph4, layout = "fr") +
++   geom_edge_link(aes(edge_alpha = n), show.legend = TRUE,
++                  arrow = a, end_cap = circle(.07, 'inches')) +
++   geom_node_point(color = "lightblue", size = 5) +
++   geom_node_text(aes(label = name), position = "identity") +
++   theme_void()
+> dev.new(width = 550, height = 330, unit = "px")
+NULL
+> ggraph(bigram_graph5, layout = "fr") +
++   geom_edge_link(aes(edge_alpha = n), show.legend = TRUE,
++                  arrow = a, end_cap = circle(.07, 'inches')) +
++   geom_node_point(color = "lightblue", size = 5) +
++   geom_node_text(aes(label = name), position = "identity") +
++   theme_void()
+> bigram_graph1 <- bigram_counts %>%
++   filter(word1 %in% c("poetry","uses") | word2 %in%
++            c("poetry","uses"))
+> bigram_graph2 <- bigram_counts %>%
++   filter(word1 %in% bigram_graph1$word1 | word1 %in%
++            bigram_graph1$word2 | word2 %in% bigram_graph1$word1 |
++            word2 %in% bigram_graph1$word2)
+> bigram_graph3 <- bigram_counts %>%
++   filter(word1 %in% bigram_graph2$word1 | word1 %in%
++            bigram_graph2$word2 | word2 %in% bigram_graph2$word1 |
++            word2 %in% bigram_graph2$word2)
+> bigram_graph
+IGRAPH 3157d37 DN-- 12 10 -- 
++ attr: name (v/c), n (e/n)
++ edges from 3157d37 (vertex names):
+ [1] lear->lord      poet->140       poet->creates   poet->hafez     poet->john      poet->juvenal's poet->laureate 
+ [8] poet->poetic    poet->t.s       poet->writes   
+> set.seed(2016)
+> a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
+> ggraph(bigram_graph1%>%graph_from_data_frame(), layout = "fr") +
++   geom_edge_link(aes(edge_alpha = n), show.legend = TRUE,
++                  arrow = a, end_cap = circle(.07, 'inches')) +
++   geom_node_point(color = "lightblue", size = 5) +
++   geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
++   theme_void()
+> dev.new()
+NULL
+> ggraph(bigram_graph2%>%graph_from_data_frame(), layout = "fr") +
++   geom_edge_link(aes(edge_alpha = n), show.legend = TRUE,
++                  arrow = a, end_cap = circle(.07, 'inches')) +
++   geom_node_point(color = "lightblue", size = 5) +
++   geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
++   theme_void()
+> dev.new()
+NULL
+> ggraph(bigram_graph3%>%graph_from_data_frame(), layout = "fr") +
++   geom_edge_link(aes(edge_alpha = n), show.legend = TRUE,
++                  arrow = a, end_cap = circle(.07, 'inches')) +
++   geom_node_point(color = "lightblue", size = 5) +
++   geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
++   theme_void()
+> 
