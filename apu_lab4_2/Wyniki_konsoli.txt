@@ -1,0 +1,122 @@
+> # Użycie potrzebnych bibliotek
+> library("rFerns")
+> library("randomForest")
+> library("mlr")
+> 
+> # wczytanie i refaktoryzacja danych
+> setwd("C:/Users/Mateusz/Downloads/OneDrive_2_4.06.2024/lab44_apu")
+> aparaty <- read.csv("aparaty.csv")
+> aparaty <- aparaty[,-3]
+> aparaty <- aparaty[,-2]
+> aparaty <- aparaty[,-1]
+> aparaty$ocena <- as.factor(aparaty$ocena)
+> 
+> # utworzenie zadania klasyfikacji
+> aparaty_task <- makeClassifTask(data = aparaty, target = "ocena")
+> 
+> # tworzenie metod
+> lrns <- makeLearners(c("lda","rpart", "C50","rFerns",
++                        "randomForest"), type = "classif")
+> 
+> # porownanie dzialania metod
+> comparasion <- benchmark(learners = lrns,
++                         tasks = aparaty_task,
++                         resampling = cv5)
+Task: aparaty, Learner: classif.lda
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    1.0000000 
+[Resample] iter 2:    1.0000000 
+[Resample] iter 3:    0.6666667 
+[Resample] iter 4:    0.6666667 
+[Resample] iter 5:    0.6666667 
+
+
+Aggregated Result: mmce.test.mean=0.8000000
+
+
+Task: aparaty, Learner: classif.rpart
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    1.0000000 
+[Resample] iter 2:    1.0000000 
+[Resample] iter 3:    0.6666667 
+[Resample] iter 4:    0.6666667 
+[Resample] iter 5:    1.0000000 
+
+
+Aggregated Result: mmce.test.mean=0.8666667
+
+
+Task: aparaty, Learner: classif.C50
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    0.6666667 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.3333333 
+[Resample] iter 4:    0.6666667 
+[Resample] iter 5:    0.3333333 
+
+
+Aggregated Result: mmce.test.mean=0.4666667
+
+
+Task: aparaty, Learner: classif.rFerns
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    0.6666667 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.6666667 
+[Resample] iter 4:    0.6666667 
+[Resample] iter 5:    0.6666667 
+
+
+Aggregated Result: mmce.test.mean=0.6000000
+
+
+Task: aparaty, Learner: classif.randomForest
+Resampling: cross-validation
+Measures:             mmce      
+[Resample] iter 1:    1.0000000 
+[Resample] iter 2:    0.3333333 
+[Resample] iter 3:    0.3333333 
+[Resample] iter 4:    0.6666667 
+[Resample] iter 5:    0.6666667 
+
+
+Aggregated Result: mmce.test.mean=0.6000000
+
+
+> 
+> comparasion
+  task.id           learner.id mmce.test.mean
+1 aparaty          classif.lda      0.8000000
+2 aparaty        classif.rpart      0.8666667
+3 aparaty          classif.C50      0.4666667
+4 aparaty       classif.rFerns      0.6000000
+5 aparaty classif.randomForest      0.6000000
+> 
+> # manualnie przepisane wartości accuracy z benchmarku
+> learner <- c("lda", "rpart", "C50", "rFerns", "randomForest")
+> accuracy <- c(0.73, 0.87, 0.33, 0.67, 0.53)
+> 
+> # utworzenie wykresu slupkowego
+> data <- data.frame(learner, accuracy)
+> barplot(data$accuracy, names.arg = data$learner, ylim = c(0, 1), ylab = "Accuracy")
+> 
+> # utworzenie zestawów danych treningowych i testowych
+> aparaty_train <- aparaty[1:13, ]
+> aparaty_test <- aparaty[14:15, ]
+> 
+> # trenowanie modelu
+> aparaty_learner <- makeLearner("classif.rpart")
+> aparaty_model <- train(aparaty_learner, aparaty_task)
+> 
+> # predykcje
+> aparaty_predictions <- predict(aparaty_model, newdata = aparaty_test)
+> 
+> # określenie performencu po treningu
+> performance <- performance(aparaty_predictions, measures = list(acc))
+> print(performance)
+acc 
+  1 
